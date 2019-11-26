@@ -1,8 +1,13 @@
 //klasa odpowiedzialna za stworzenie ekranu BD - 2 tabel oraz robieniu operacji typu CRUD
 
 //wzorzec Singleton - tworzenie tylko instancji, zamiast nowych obiektow za kazdym razem
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
+import 'package:path/path.dart';
+import 'package:testy_nov_p_8/models/user.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = new DatabaseHelper.internal();
@@ -14,6 +19,11 @@ class DatabaseHelper {
 
   static Database _db;
 
+  final String tableUser = "userTable";
+  final String columnId = "id";
+  final String columndUserName = "username";
+  final String columnPassword = "password";
+
   Future<Database> get db async {
     if (_db != null) {
       return _db;
@@ -24,5 +34,25 @@ class DatabaseHelper {
 
   DatabaseHelper.internal();
 
-  initDb() async {}
+  initDb() async {
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentDirectory.path, "maindb.db");  //home://directory/files/maindb.db
+
+    var ourDb = await openDatabase(path, version: 1, onCreate: _onCreate);
+    return ourDb;
+  }
+  void _onCreate(Database db, int newVersion) async{
+    await db.execute(
+      "CREATE TABLE $tableUser($columnId INTEGER PRIMARY KEY, $columndUserName TEXT, $columnPassword TEXT)"
+    );
+  }
+
+  //CRUD - Create/Read/Update/Delete
+  
+  //Insertion
+  Future<int> saveUser(User user) async{
+    var dbClient = await db;
+    int res = await dbClient.insert("$tableUser", user.toMap());
+    return res;
+  }
 }
