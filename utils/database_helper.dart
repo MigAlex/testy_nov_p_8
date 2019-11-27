@@ -47,7 +47,7 @@ class DatabaseHelper {
     );
   }
 
-  //CRUD - Create/Read/Update/Delete
+  //==========CRUD - Create/Read/Update/Delete=============
   
   //Insertion
   Future<int> saveUser(User user) async{
@@ -65,7 +65,7 @@ class DatabaseHelper {
   }
 
   //Get count of users
-  Future<int> getCont() async{
+  Future<int> getCount() async{
     var dbClient = await db;
     return Sqflite.firstIntValue(
       await dbClient.rawQuery(
@@ -82,4 +82,6 @@ class DatabaseHelper {
     if(result.length == 0) return null;
     return new User.fromMap(result.first);
   }
+
+
 }
