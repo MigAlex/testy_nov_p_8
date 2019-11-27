@@ -13,7 +13,7 @@ void main() async{
   var db = new DatabaseHelper();
 
   //======add user=====
-//await db.saveUser(new User('Fred', 'ahoy'));
+//await db.saveUser(new User('Brian', 'adams'));
 
 //=====retrieving a user====
 User ana = await db.getUser(2);
@@ -54,6 +54,24 @@ class Home extends StatelessWidget {
         title: Text('Databases'),
         centerTitle: true,
         backgroundColor: Colors.brown,
+      ),
+      body: ListView.builder(
+        itemCount: _users.length,
+        itemBuilder: (BuildContext context, int position){
+          return Card(
+            color: Colors.pink.shade100,
+            elevation: 4.0,
+            child: ListTile(
+              leading: CircleAvatar(
+                child: Text('${User.fromMap(_users[position]).id}'),
+              ),
+              title: Text("User: ${User.fromMap(_users[position]).username}"),  //wyswietlenie nazwy usera
+              subtitle: Text("ID: ${User.fromMap(_users[position]).id}"),
+
+              onTap: () => debugPrint("${User.fromMap(_users[position]).password}"),
+            ),
+          );
+        },
       ),
     );
   }
