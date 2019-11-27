@@ -55,4 +55,31 @@ class DatabaseHelper {
     int res = await dbClient.insert("$tableUser", user.toMap());
     return res;
   }
+
+  //Get users
+  Future<List> getAllUsers() async{
+    var dbClient = await db;
+    var result = await dbClient.rawQuery('SELECT * FROM $tableUser'); //wybierz wszystkich userow z tej BD i zapisz w zmiennej result
+
+    return result.toList();   //warto dodawac ten .toList(), na wszelki wyps gdyby sie cos jebło, bo chcemy przeciez dostac liste Stringów
+  }
+
+  //Get count of users
+  Future<int> getCont() async{
+    var dbClient = await db;
+    return Sqflite.firstIntValue(
+      await dbClient.rawQuery(
+        'SELECT COUNT (*) FROM $tableUser'
+      )
+    );
+  }
+
+  //Get specific user by id
+  Future<User> getUser(int id) async{
+    var dbClient = await db;
+
+    var result = await dbClient.rawQuery('SELECT * FROM $tableUser WHERE $columnId = $id'); 
+    if(result.length == 0) return null;
+    return new User.fromMap(result.first);
+  }
 }
