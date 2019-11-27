@@ -12,14 +12,31 @@ List _users;
 void main() async{
   var db = new DatabaseHelper();
 
-  //add user
-  int savedUser = await db.saveUser(new User('Heniek', 'witam'));
+  //======add user=====
+//await db.saveUser(new User('Fred', 'ahoy'));
+
+//=====retrieving a user====
+User ana = await db.getUser(2);
+User anaUpdated = User.fromMap({"username": "updatedAna", "password": "UpdatedPassword", 'id': 6});
+
+
+//====deleting a user =====
+//int userDeleted = await db.deleteUser(5);
+//print("Delete user: $userDeleted");
+
+//====updating a user====
+await db.updateUser(anaUpdated);
+
+
+//===couting all users====
+int count = await db.getCount();
+print("Count: $count");
 
   //get all users
   _users = await db.getAllUsers();
   for(int i=0; i<_users.length; i++){
     User user = User.map(_users[i]);        //jako ze metoda getAllUsers zwraca liste, trzeba ich zmapowac na typ User
-    print("Username: ${user.username}");
+    print("Username: ${user.username}, User id: ${user.id}");
   }
 
   runApp(MaterialApp(
